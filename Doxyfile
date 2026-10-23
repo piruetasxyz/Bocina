@@ -1,0 +1,22 @@
+# configuracion de doxygen
+# solo incluye opciones distintas a las por defecto
+# el idioma y la carpeta de salida se agregan al correr,
+# ver .github/workflows/doxygen.yml
+
+PROJECT_NAME           = Bocina
+
+INPUT                 = src docs
+FILE_PATTERNS         = *.h *.dox
+RECURSIVE             = YES
+
+# ejemplos de arduino y de pico sdk
+EXAMPLE_PATH          = examples pico
+EXTENSION_MAPPING     = ino=C++
+
+OUTPUT_DIRECTORY      = build/docs
+GENERATE_LATEX        = NO
+
+# fallar si algo publico queda sin documentar
+QUIET                 = YES
+WARN_IF_UNDOCUMENTED  = YES
+WARN_AS_ERROR         = FAIL_ON_WARNINGS

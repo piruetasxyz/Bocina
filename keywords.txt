@@ -1,0 +1,37 @@
+################################
+# Clases
+################################
+
+Bocina	KEYWORD1
+
+################################
+# Metodos y funciones
+################################
+
+setPatita	KEYWORD2
+setModo	KEYWORD2
+getModo	KEYWORD2
+setPatitasI2S	KEYWORD2
+setForma	KEYWORD2
+getForma	KEYWORD2
+setVolumen	KEYWORD2
+getVolumen	KEYWORD2
+sonar	KEYWORD2
+tocar	KEYWORD2
+tocarMuestras	KEYWORD2
+actualizar	KEYWORD2
+sonando	KEYWORD2
+silenciar	KEYWORD2
+
+################################
+# Constantes
+################################
+
+TONOS	LITERAL1
+MUESTRAS	LITERAL1
+CUADRADA	LITERAL1
+SENO	LITERAL1
+TRIANGULO	LITERAL1
+SIERRA	LITERAL1
+RUIDO	LITERAL1
+FRECUENCIA_MUESTREO	LITERAL1

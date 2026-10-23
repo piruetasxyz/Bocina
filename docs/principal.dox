@@ -1,0 +1,120 @@
+/**
+ * \mainpage Bocina
+ *
+ * \~spanish
+ *
+ * [English version](../en/index.html)
+ *
+ * Biblioteca para hacer sonar bocinas con microcontroladores. Funciona con
+ * placas Arduino y con placas Raspberry Pi Pico, tanto desde Arduino como
+ * desde el Pico SDK.
+ *
+ * ## Modos
+ *
+ * - `Bocina::TONOS`: ondas cuadradas en cualquier patita, para un buzzer
+ *   pasivo o un piezo. Funciona en todas las placas.
+ * - `Bocina::MUESTRAS`: ondas seno, triangulo, sierra, cuadrada y ruido, y
+ *   grabaciones. Sale por un conversor I2S (por ejemplo MAX98357A) en Pico SDK
+ *   y en placas SAMD21, y por el conversor analogo de A0 en Arduino Uno R4.
+ *
+ * ## Conexiones
+ *
+ * En modo TONOS, el buzzer va entre la patita y tierra (GND).
+ *
+ * En modo MUESTRAS con I2S, el conversor va a 3.3V y tierra, y sus patitas
+ * DIN, BCLK y LRC a la placa. En Pico SDK son gpio 9, 10 y 11, y se pueden
+ * cambiar con Bocina::setPatitasI2S(). En MKR Zero son A6, 2 y 3, y en
+ * Arduino Zero son 9, 1 y 0.
+ *
+ * En Arduino Uno R4, A0 va a la entrada de un modulo amplificador, por
+ * ejemplo PAM8302. Nunca conectes un parlante directo a una patita.
+ *
+ * ## Por donde empezar
+ *
+ * - La clase Bocina tiene todo lo que necesitas para hacer sonar una bocina.
+ * - En la pagina de ejemplos hay ejemplos para Arduino y para Pico SDK.
+ * - El espacio de nombres BocinaHardware explica como agregar otra plataforma.
+ *
+ * \~english
+ *
+ * [Versión en español](../es/index.html)
+ *
+ * Library for playing speakers with microcontrollers. It works with Arduino
+ * boards and with Raspberry Pi Pico boards, both from Arduino and from the
+ * Pico SDK.
+ *
+ * ## Modes
+ *
+ * - `Bocina::TONOS`: square waves on any pin, for a passive buzzer or a
+ *   piezo. It works on every board.
+ * - `Bocina::MUESTRAS`: sine, triangle, saw, square and noise waves, and
+ *   recordings. It goes out through an I2S converter (for example MAX98357A)
+ *   on Pico SDK and on SAMD21 boards, and through the analog converter on A0
+ *   on Arduino Uno R4.
+ *
+ * ## Wiring
+ *
+ * In TONOS mode, the buzzer goes between the pin and ground (GND).
+ *
+ * In MUESTRAS mode with I2S, the converter goes to 3.3V and ground, and its
+ * DIN, BCLK and LRC pins to the board. On Pico SDK they are gpio 9, 10 and
+ * 11, and can be changed with Bocina::setPatitasI2S(). On MKR Zero they are
+ * A6, 2 and 3, and on Arduino Zero they are 9, 1 and 0.
+ *
+ * On Arduino Uno R4, A0 goes to the input of an amplifier module, for
+ * example PAM8302. Never connect a speaker straight to a pin.
+ *
+ * ## Where to start
+ *
+ * - The Bocina class has everything you need to play a speaker.
+ * - The examples page has examples for Arduino and for the Pico SDK.
+ * - The BocinaHardware namespace explains how to add another platform.
+ */
+
+/**
+ * \example ej00_sonar/ej00_sonar.ino
+ * \~spanish Arduino: toca tres frecuencias con un buzzer pasivo.
+ * \~english Arduino: plays three frequencies with a passive buzzer.
+ */
+
+/**
+ * \example ej01_sinBloquear/ej01_sinBloquear.ino
+ * \~spanish Arduino: alterna dos frecuencias sin bloquear, mientras parpadea el led de la placa.
+ * \~english Arduino: alternates two frequencies without blocking, while the board's LED blinks.
+ */
+
+/**
+ * \example ej02_formasDeOnda/ej02_formasDeOnda.ino
+ * \~spanish Arduino: toca 220 Hz con cada forma de onda, en modo MUESTRAS.
+ * \~english Arduino: plays 220 Hz with each waveform, in MUESTRAS mode.
+ */
+
+/**
+ * \example ej03_grabacion/ej03_grabacion.ino
+ * \~spanish Arduino: calcula una grabacion y la toca una y otra vez, en modo MUESTRAS.
+ * \~english Arduino: computes a recording and plays it over and over, in MUESTRAS mode.
+ */
+
+/**
+ * \example ej00_sonar/main.cpp
+ * \~spanish Pico SDK: toca tres frecuencias con un buzzer pasivo.
+ * \~english Pico SDK: plays three frequencies with a passive buzzer.
+ */
+
+/**
+ * \example ej01_sinBloquear/main.cpp
+ * \~spanish Pico SDK: alterna dos frecuencias sin bloquear, mientras parpadea el led de la placa.
+ * \~english Pico SDK: alternates two frequencies without blocking, while the board's LED blinks.
+ */
+
+/**
+ * \example ej02_formasDeOnda/main.cpp
+ * \~spanish Pico SDK: toca 220 Hz con cada forma de onda, por I2S.
+ * \~english Pico SDK: plays 220 Hz with each waveform, through I2S.
+ */
+
+/**
+ * \example ej03_grabacion/main.cpp
+ * \~spanish Pico SDK: calcula una grabacion y la toca una y otra vez, por I2S.
+ * \~english Pico SDK: computes a recording and plays it over and over, through I2S.
+ */

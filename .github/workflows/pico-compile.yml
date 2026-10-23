@@ -1,0 +1,48 @@
+name: Pico Compile
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - src/**
+      - pico/**
+  pull_request:
+    paths:
+      - src/**
+      - pico/**
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            cmake \
+            ninja-build \
+            gcc-arm-none-eabi \
+            libnewlib-arm-none-eabi \
+            git
+
+      - name: Clone Pico SDK
+        run: |
+          git clone --depth=1 https://github.com/raspberrypi/pico-sdk.git $HOME/pico-sdk
+          cd $HOME/pico-sdk
+          git submodule update --init
+
+      - name: Configure
+        run: |
+          cd pico
+          mkdir build
+          cd build
+          PICO_SDK_PATH=$HOME/pico-sdk cmake ..
+
+      - name: Build
+        run: |
+          cd pico/build
+          cmake --build .

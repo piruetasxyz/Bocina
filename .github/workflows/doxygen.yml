@@ -1,0 +1,90 @@
+# generar la documentacion con doxygen, en espanol y en ingles,
+# y publicarla en github pages
+
+name: Doxygen
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - src/**
+      - examples/**
+      - pico/**
+      - docs/**
+      - Doxyfile
+      - library.properties
+      - .github/workflows/doxygen.yml
+  pull_request:
+    paths:
+      - src/**
+      - examples/**
+      - pico/**
+      - docs/**
+      - Doxyfile
+      - library.properties
+      - .github/workflows/doxygen.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# no cancelar una publicacion a medio camino
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  generar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # instalar una version fija de doxygen,
+      # la de apt es antigua y su traduccion al espanol esta incompleta
+      - name: Instalar doxygen
+        run: |
+          curl -sL -o doxygen.tar.gz https://github.com/doxygen/doxygen/releases/download/Release_1_18_0/doxygen-1.18.0.linux.bin.tar.gz
+          tar xzf doxygen.tar.gz
+          echo "$PWD/doxygen-1.18.0/bin" >> "$GITHUB_PATH"
+
+      - name: Generar documentacion
+        run: |
+          # usar la version de library.properties
+          version=$(sed -n 's/^version=//p' library.properties)
+
+          # doxygen no crea carpetas anidadas
+          mkdir -p build/docs
+
+          # generar una vez por idioma, en build/docs/es y build/docs/en
+          for idioma in es en; do
+            if [ "$idioma" = es ]; then lenguaje=Spanish; else lenguaje=English; fi
+            {
+              cat Doxyfile
+              echo "OUTPUT_LANGUAGE = $lenguaje"
+              echo "HTML_OUTPUT = $idioma"
+              echo "PROJECT_NUMBER = $version"
+            } | doxygen -
+          done
+
+          # pagina para elegir idioma
+          cp docs/index.html build/docs/
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: build/docs
+
+  publicar:
+    # publicar solo desde main del repositorio de piruetasxyz,
+    # no desde forks ni pull requests
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && github.repository_owner == 'piruetasxyz'
+    needs: generar
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.publicacion.outputs.page_url }}
+    steps:
+      - id: publicacion
+        uses: actions/deploy-pages@v5

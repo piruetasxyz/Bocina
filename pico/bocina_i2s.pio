@@ -1,0 +1,32 @@
+; i2s de 16 bits por canal, para la biblioteca Bocina
+;
+; cada palabra de 32 bits que llega al fifo es un cuadro de audio:
+; los 16 bits altos van al canal izquierdo y los 16 bajos al derecho,
+; el bit mas significativo primero
+;
+; patitas de lado (side-set), dos patitas seguidas:
+;   bit 0: reloj de bits (BCLK), la patita base
+;   bit 1: reloj de palabra (LRC), la patita base + 1
+; patita de salida (out): datos (DIN)
+;
+; cada bit dura dos ciclos: el dato cambia con BCLK en 0, y el conversor
+; lo lee cuando BCLK sube. LRC cambia durante el ultimo bit de un canal,
+; un bit antes de que empiece el otro, como pide el formato i2s.
+; un cuadro dura 64 ciclos, asi que la maquina de estados tiene que
+; correr a 64 veces la frecuencia de muestreo
+
+.program bocina_i2s
+.side_set 2
+
+.wrap_target
+    set x, 14             side 0b01 ; contar 15 bits, el 16 va aparte
+izquierdo:
+    out pins, 1           side 0b00
+    jmp x-- izquierdo     side 0b01
+    out pins, 1           side 0b10 ; ultimo bit izquierdo, LRC sube
+    set x, 14             side 0b11
+derecho:
+    out pins, 1           side 0b10
+    jmp x-- derecho       side 0b11
+    out pins, 1           side 0b00 ; ultimo bit derecho, LRC baja
+.wrap

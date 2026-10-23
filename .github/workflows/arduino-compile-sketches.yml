@@ -1,0 +1,61 @@
+# Check compilation of Arduino examples
+
+name: Arduino Compile
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push to the main branch, and on pull requests
+  push:
+    branches:
+      - main
+    paths:
+      - src/**
+      - examples/**
+  pull_request:
+    paths:
+      - src/**
+      - examples/**
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "compile-sketches"
+  compile-sketches:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # compilar los ejemplos para cada placa.
+    # en arduino uno solo los de tonos: no tiene modo MUESTRAS,
+    # y la grabacion de ej03 no cabe en su memoria
+    strategy:
+      fail-fast: false
+      matrix:
+        placa:
+          - fqbn: arduino:avr:uno
+            plataforma: arduino:avr
+            ejemplos: |
+              - examples/ej00_sonar
+              - examples/ej01_sinBloquear
+          - fqbn: arduino:renesas_uno:unor4wifi
+            plataforma: arduino:renesas_uno
+            ejemplos: |
+              - examples/
+          - fqbn: arduino:renesas_uno:minima
+            plataforma: arduino:renesas_uno
+            ejemplos: |
+              - examples/
+          - fqbn: arduino:samd:mkrzero
+            plataforma: arduino:samd
+            ejemplos: |
+              - examples/
+
+    # Steps represent a sequence of tasks that will be run as part of the job
+    steps:
+      - uses: actions/checkout@v4
+      - uses: arduino/compile-sketches@v1
+        with:
+          fqbn: ${{ matrix.placa.fqbn }}
+          platforms: |
+            - name: ${{ matrix.placa.plataforma }}
+          sketch-paths: ${{ matrix.placa.ejemplos }}
+          libraries: |
+            - source-path: ./
